@@ -2,104 +2,662 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAM · Vademécum Académico de Medicamentos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jánova Médica · Vademécum Académico de Medicamentos</title>
 <style>
-:root{--navy:#0d1b2a;--teal:#0a9396;--teal2:#94d2bd;--amber:#e9c46a;--cream:#faf9f6;--muted:#6b7280;--border:#e2e8f0;--card:#fff;--radius:12px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--cream);color:var(--navy);min-height:100vh}
-header{background:var(--navy);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:1rem;height:64px;box-shadow:0 2px 16px rgba(0,0,0,.3)}
-.logo{font-family:Georgia,"Times New Roman",serif;font-size:1.9rem;font-weight:900;color:var(--amber);letter-spacing:-1px;flex-shrink:0}
-.logo span{color:var(--teal2)}
-.search-wrap{flex:1;max-width:620px;position:relative}
-#searchInput{width:100%;padding:.6rem 3rem .6rem 2.8rem;border:2px solid transparent;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;font-size:1rem;font-family:inherit;outline:none;transition:.2s}
-#searchInput::placeholder{color:rgba(255,255,255,.4)}
-#searchInput:focus{background:rgba(255,255,255,.18);border-color:var(--teal2)}
-.si{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.45);pointer-events:none}
-.clear-btn{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);border:none;color:#fff;cursor:pointer;border-radius:50%;width:20px;height:20px;font-size:.75rem;display:none;align-items:center;justify-content:center}
-.clear-btn.visible{display:flex}
-.count-badge{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,.1);color:var(--teal2);padding:.3rem .8rem;border-radius:20px;font-size:.78rem;font-weight:600}
-.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 64px)}
-aside{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;position:sticky;top:64px;height:calc(100vh - 64px)}
-.sidebar-hdr{padding:.8rem 1.2rem .6rem;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border)}
-#drugList{list-style:none}
-#drugList li{border-bottom:1px solid var(--border)}
-#drugList li button{width:100%;text-align:left;padding:.6rem 1.1rem;background:none;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;color:var(--navy);transition:.15s;display:flex;align-items:flex-start;gap:.6rem}
-#drugList li button:hover{background:#f0fdfa;color:var(--teal)}
-#drugList li.active button{background:var(--teal);color:#fff;font-weight:600}
-.di{width:22px;height:22px;border-radius:50%;background:var(--teal2);color:var(--navy);font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-#drugList li.active button .di{background:rgba(255,255,255,.25);color:#fff}
-.li-text{flex:1;min-width:0}
-.li-name{display:block;line-height:1.3}
-.li-match{display:block;font-size:.72rem;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#drugList li.active button .li-match{color:rgba(255,255,255,.7)}
-.match-tag{display:inline-block;background:#e0f2fe;color:#0369a1;padding:0 .3rem;border-radius:3px;font-size:.67rem;font-weight:600;margin-right:.2rem}
-#drugList li.active button .match-tag{background:rgba(255,255,255,.2);color:#fff}
-.no-results{padding:2rem 1.2rem;color:var(--muted);font-size:.9rem;text-align:center}
-main{padding:2rem;overflow-y:auto}
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:1rem}
-.welcome-icon{font-size:4rem;opacity:.12}
-.welcome h2{font-family:Georgia,serif;font-size:2rem;opacity:.35}
-.welcome p{color:var(--muted);max-width:380px;line-height:1.7}
-.drug-card{max-width:900px;animation:slideIn .3s ease}
-@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.drug-header{background:var(--navy);border-radius:var(--radius) var(--radius) 0 0;padding:1.8rem 2rem;position:relative;overflow:hidden}
-.drug-header::before{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:var(--teal);opacity:.12;border-radius:50%}
-.drug-header::after{content:"";position:absolute;bottom:-60px;right:60px;width:120px;height:120px;background:var(--amber);opacity:.08;border-radius:50%}
-.drug-name{font-family:Georgia,serif;font-size:2.2rem;font-weight:900;color:#fff;line-height:1.1;position:relative;z-index:1}
-.drug-cat{margin-top:.4rem;display:inline-block;background:var(--teal);color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;position:relative;z-index:1}
+/* ── iOS Dark Mode Design System ── */
+:root {
+  /* iOS Dark system colors */
+  --ios-blue:        #0A84FF;
+  --ios-teal:        #5AC8FA;
+  --ios-green:       #30D158;
+  --ios-orange:      #FF9F0A;
+  --ios-red:         #FF453A;
+  --ios-yellow:      #FFD60A;
+  --ios-purple:      #BF5AF2;
+  --ios-indigo:      #5E5CE6;
+  --ios-pink:        #FF375F;
 
+  /* Dark backgrounds (iOS dark mode layering) */
+  --bg-primary:      #000000;
+  --bg-secondary:    #1C1C1E;
+  --bg-tertiary:     #2C2C2E;
+  --bg-elevated:     #3A3A3C;
 
-.search-context{margin-top:.6rem;position:relative;z-index:1}
-.context-pill{display:inline-flex;align-items:center;background:rgba(148,210,189,.2);border:1px solid rgba(148,210,189,.4);color:var(--teal2);padding:.2rem .65rem;border-radius:20px;font-size:.75rem;margin:.15rem}
-.sections-grid{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);overflow:hidden}
-.section-block{border-bottom:1px solid var(--border);overflow:hidden}
-.section-block:last-child{border-bottom:none}
-.section-block.has-match .section-toggle{background:#f0fdf4}
-.section-toggle{width:100%;display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:none;border:none;cursor:pointer;text-align:left;transition:.15s}
-.section-toggle:hover{background:#f8fcfc}
-.section-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-.section-title{font-family:Georgia,serif;font-size:1rem;font-weight:700;color:var(--navy);flex:1}
-.match-indicator{font-size:.7rem;background:#dcfce7;color:#166534;padding:.15rem .5rem;border-radius:10px;font-weight:600}
-.section-chevron{color:var(--muted);font-size:.8rem;transition:transform .25s}
-.section-toggle.open .section-chevron{transform:rotate(180deg)}
-.section-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
-.section-body.open{max-height:3000px}
-.section-content{padding:.2rem 1.5rem 1.2rem 4.3rem;font-size:.93rem;line-height:1.75;color:#374151}
-.sec-propiedades .section-icon{background:#e0f2fe;color:#0369a1}
-.sec-indicaciones .section-icon{background:#dcfce7;color:#166534}
-.sec-contra .section-icon{background:#fef3c7;color:#92400e}
-.sec-reacciones .section-icon{background:#fce7f3;color:#9d174d}
-.sec-advertencias .section-icon{background:#fff7ed;color:#c2410c}
-.sec-viadosis .section-icon{background:#f0fdf4;color:#065f46}
-.sec-presentaciones .section-icon{background:#f5f3ff;color:#5b21b6}
-mark{background:#fef08a;color:var(--navy);border-radius:2px;padding:0 1px}
-.dosis-block{background:#f0fdf4;border-left:3px solid var(--teal);padding:.6rem 1rem;border-radius:0 8px 8px 0;margin:.4rem 0;font-family:"Consolas","Courier New",monospace;font-size:.82rem;line-height:1.6}
-.pres-item{background:#f5f3ff;border-left:3px solid #7c3aed;padding:.5rem .9rem;border-radius:0 6px 6px 0;margin:.3rem 0;font-size:.85rem;line-height:1.5}
-aside::-webkit-scrollbar{width:4px}
-aside::-webkit-scrollbar-thumb{background:var(--teal2);border-radius:4px}
-.menu-btn{display:none;align-items:center;justify-content:center;background:none;border:none;color:#fff;cursor:pointer;font-size:1.3rem;padding:.3rem}
-@media(max-width:768px){
-  .layout{grid-template-columns:1fr}
-  aside{position:fixed;left:-270px;top:64px;height:calc(100vh - 64px);width:270px;transition:left .3s;z-index:50;box-shadow:4px 0 20px rgba(0,0,0,.15)}
-  aside.open{left:0}
-  .menu-btn{display:flex}
-  main{padding:1rem}
-  .drug-name{font-size:1.6rem}
+  /* Labels dark */
+  --label:           #FFFFFF;
+  --label-sec:       rgba(235,235,245,0.60);
+  --label-ter:       rgba(235,235,245,0.30);
+  --label-quat:      rgba(235,235,245,0.18);
+
+  /* Fill dark */
+  --fill:            rgba(120,120,128,0.36);
+  --fill-sec:        rgba(120,120,128,0.32);
+  --fill-ter:        rgba(118,118,128,0.24);
+
+  /* Separator dark */
+  --sep:             rgba(84,84,88,0.65);
+  --sep-opaque:      #38383A;
+
+  /* Nav bar height */
+  --nav-h: 108px;
 }
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--label);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── HEADER ── */
+header {
+  background: rgba(28,28,30,0.92);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--sep-opaque);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: env(safe-area-inset-top,0) 16px 0;
+}
+
+.nav-top {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 8px;
+}
+
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--ios-blue);
+  cursor: pointer;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.menu-btn:active { background: var(--fill); }
+
+.logo {
+  font-family: -apple-system, "SF Pro Display", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ios-blue);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.logo span { color: var(--ios-teal); }
+
+.count-badge {
+  margin-left: auto;
+  background: var(--ios-blue);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  flex-shrink: 0;
+}
+
+/* Row 2: Search */
+.search-wrap { padding: 8px 0 10px; }
+
+.search-inner {
+  position: relative;
+  background: var(--fill-sec);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+.search-inner:focus-within { background: var(--fill); }
+
+.si {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--label-sec);
+  font-size: 15px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 8px 36px 8px 34px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: var(--label);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  caret-color: var(--ios-blue);
+}
+#searchInput::placeholder { color: var(--label-sec); }
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--label-ter);
+  border: none;
+  color: var(--bg-secondary);
+  cursor: pointer;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.clear-btn.visible { display: flex; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* ── SIDEBAR ── */
+aside {
+  background: var(--bg-secondary);
+  border-right: 0.5px solid var(--sep-opaque);
+  overflow-y: auto;
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+}
+aside::-webkit-scrollbar { width: 3px; }
+aside::-webkit-scrollbar-thumb { background: var(--sep-opaque); border-radius: 2px; }
+
+.sidebar-hdr {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--label-sec);
+  background: var(--bg-primary);
+  border-bottom: 0.5px solid var(--sep-opaque);
+}
+
+#drugList { list-style: none; }
+#drugList li { border-bottom: 0.5px solid var(--sep-opaque); }
+#drugList li:last-child { border-bottom: none; }
+
+#drugList li button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--label);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: background .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+#drugList li button:active { background: var(--fill-ter); }
+#drugList li:not(.active) button:hover { background: var(--fill-ter); }
+#drugList li.active button {
+  background: var(--ios-blue);
+  color: #fff;
+}
+
+.di {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(10,132,255,0.25);
+  color: var(--ios-blue);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+#drugList li.active button .di {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+.li-text { flex: 1; min-width: 0; }
+.li-name { display: block; line-height: 1.3; font-weight: 500; }
+.li-match {
+  display: block;
+  font-size: 12px;
+  color: var(--label-sec);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#drugList li.active button .li-match { color: rgba(255,255,255,0.70); }
+
+.match-tag {
+  display: inline-block;
+  background: rgba(10,132,255,0.18);
+  color: var(--ios-blue);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 3px;
+}
+#drugList li.active button .match-tag {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.no-results {
+  padding: 24px 16px;
+  color: var(--label-sec);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ── MAIN ── */
+main { padding: 20px 16px; overflow-y: auto; }
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 12px;
+}
+.welcome-icon { font-size: 56px; opacity: 0.12; }
+.welcome h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--label);
+  opacity: 0.28;
+  letter-spacing: -0.5px;
+}
+.welcome p {
+  color: var(--label-sec);
+  max-width: 320px;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.drug-card {
+  max-width: 860px;
+  animation: slideUp .28s cubic-bezier(0.34,1.04,0.64,1);
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* Drug header – dark gradient-free */
+.drug-header {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--sep-opaque);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  padding: 22px 20px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.drug-header::before {
+  content:"";
+  position:absolute; top:-40px; right:-40px;
+  width:160px; height:160px;
+  background: rgba(10,132,255,0.08);
+  border-radius:50%;
+}
+.drug-header::after {
+  content:"";
+  position:absolute; bottom:-50px; left:20px;
+  width:120px; height:120px;
+  background: rgba(90,200,250,0.06);
+  border-radius:50%;
+}
+
+.drug-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--label);
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.3px;
+}
+.drug-cat {
+  margin-top: 6px;
+  display: inline-block;
+  background: rgba(10,132,255,0.18);
+  color: var(--ios-blue);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.search-context { margin-top: 8px; position: relative; z-index: 1; }
+.context-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(90,200,250,0.15);
+  color: var(--ios-teal);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin: 2px 3px 2px 0;
+}
+
+/* Sections – dark table view */
+.sections-grid {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--sep-opaque);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+}
+
+.section-block { border-bottom: 0.5px solid var(--sep-opaque); overflow: hidden; }
+.section-block:last-child { border-bottom: none; }
+.section-block.has-match .section-toggle { background: rgba(48,209,88,0.07); }
+
+.section-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.section-toggle:active { background: var(--fill-ter); }
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.section-title { font-size: 16px; font-weight: 600; color: var(--label); flex: 1; }
+.match-indicator {
+  font-size: 11px;
+  background: rgba(48,209,88,0.18);
+  color: var(--ios-green);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.section-chevron {
+  color: var(--label-ter);
+  font-size: 13px;
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.section-toggle.open .section-chevron { transform: rotate(180deg); }
+.section-body { max-height: 0; overflow: hidden; transition: max-height .38s cubic-bezier(.4,0,.2,1); }
+.section-body.open { max-height: 3000px; }
+
+.section-content {
+  padding: 4px 16px 16px 60px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--label-sec);
+}
+
+/* Section icon colors – dark versions */
+.sec-propiedades   .section-icon { background: rgba(10,132,255,0.15);  color: var(--ios-blue); }
+.sec-indicaciones  .section-icon { background: rgba(48,209,88,0.15);   color: var(--ios-green); }
+.sec-contra        .section-icon { background: rgba(255,159,10,0.15);  color: var(--ios-orange); }
+.sec-reacciones    .section-icon { background: rgba(255,69,58,0.15);   color: var(--ios-red); }
+.sec-advertencias  .section-icon { background: rgba(255,214,10,0.15);  color: var(--ios-yellow); }
+.sec-viadosis      .section-icon { background: rgba(90,200,250,0.15);  color: var(--ios-teal); }
+.sec-presentaciones .section-icon{ background: rgba(191,90,242,0.15);  color: var(--ios-purple); }
+
+mark {
+  background: rgba(255,214,10,0.25);
+  color: var(--label);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.dosis-block {
+  background: rgba(90,200,250,0.08);
+  border-left: 3px solid var(--ios-teal);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  margin: 6px 0;
+  font-family: "SF Mono","Courier New",monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--label-sec);
+}
+.pres-item {
+  background: rgba(191,90,242,0.08);
+  border-left: 3px solid var(--ios-purple);
+  padding: 6px 10px;
+  border-radius: 0 8px 8px 0;
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--label-sec);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  :root { --nav-h: 108px; }
+  .layout { grid-template-columns: 1fr; }
+  aside {
+    position: fixed;
+    left: -285px;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    width: 285px;
+    transition: left .28s cubic-bezier(.4,0,.2,1);
+    z-index: 50;
+  }
+  aside.open { left: 0; box-shadow: 6px 0 40px rgba(0,0,0,0.6); }
+  .menu-btn { display: flex; }
+  .drug-name { font-size: 20px; }
+  .drug-header { padding: 18px 16px 16px; border-radius: 14px 14px 0 0; }
+  .sections-grid { border-radius: 0 0 14px 14px; }
+  .section-content { padding-left: 56px; }
+  main { padding: 16px 12px; }
+}
+
+@media (min-width: 769px) {
+  :root { --nav-h: 64px; }
+  header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    height: 64px;
+  }
+  .nav-top { flex: none; padding: 0; height: auto; }
+  .search-wrap { flex: 1; max-width: 540px; padding: 0; margin-left: 12px; }
+  .count-badge { order: 10; }
+}
+
+
+
+/* ── Welcome screen – exact replica ── */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-h) - 60px);
+  text-align: center;
+  padding: 24px 20px 32px;
+  position: relative;
+  overflow: hidden;
+  background: #1b2538;
+}
+
+/* PCB circuit texture */
+.welcome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(80,140,255,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,140,255,0.055) 1px, transparent 1px);
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+
+/* radial fade so grid is visible only in center-edges */
+.welcome::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 65% at 50% 50%,
+    transparent 30%, #1b2538 100%);
+  pointer-events: none;
+}
+
+/* ── Pill icon frame ── */
+.wlc-frame {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* dark metallic rounded square */
+.wlc-frame-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #1e2d45 0%, #111824 100%);
+  border: 1.5px solid rgba(80,140,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* circuit lines inside frame */
+.wlc-frame-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(80,140,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,140,255,0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* 3D pill SVG */
+.wlc-pill {
+  width: 110px;
+  height: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+/* corner bracket decorations on the frame */
+.wlc-frame .br {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(80,150,255,0.7);
+  border-style: solid;
+}
+.wlc-frame .br-tl { top: -1px; left: -1px; border-width: 3px 0 0 3px; border-radius: 8px 0 0 0; }
+.wlc-frame .br-tr { top: -1px; right: -1px; border-width: 3px 3px 0 0; border-radius: 0 8px 0 0; }
+.wlc-frame .br-bl { bottom: -1px; left: -1px; border-width: 0 0 3px 3px; border-radius: 0 0 0 8px; }
+.wlc-frame .br-br { bottom: -1px; right: -1px; border-width: 0 3px 3px 0; border-radius: 0 0 8px 0; }
+
+/* outer subtle ring */
+.wlc-frame-outer-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 38px;
+  border: 1px solid rgba(80,140,255,0.1);
+}
+
+/* ── Title & subtitle ── */
+.wlc-title {
+  font-size: 30px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.wlc-sub {
+  font-size: 14px;
+  color: rgba(180,195,220,0.7);
+  line-height: 1.6;
+  max-width: 270px;
+  position: relative;
+  z-index: 1;
+}
+
+
 </style>
 </head>
 <body>
 <header>
-  <button class="menu-btn" onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button>
-  <div class="logo">VA<span>M</span></div>
-  <div class="search-wrap">
-    <span class="si">&#128269;</span>
-    <input type="text" id="searchInput" placeholder="Buscar sustancia, síntoma, indicación..." autocomplete="off"/>
-    <button class="clear-btn" id="clearBtn" onclick="clearSearch()">&#10005;</button>
+  <div class="nav-top">
+    <button class="menu-btn" onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button>
+    <div class="logo"><span style="color:#E9C46A;">Jánova</span> <span style="color:#0A84FF;">Médica</span></div>
+    <div class="count-badge" id="countBadge">426 medicamentos</div>
   </div>
-  <div class="count-badge" id="countBadge">426 medicamentos</div>
+  <div class="search-wrap">
+    <div class="search-inner">
+      <span class="si">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="Buscar sustancia, síntoma, indicación..." autocomplete="off"/>
+      <button class="clear-btn" id="clearBtn" onclick="clearSearch()">&#10005;</button>
+    </div>
+  </div>
 </header>
+
 <div class="layout">
   <aside id="sidebar">
     <div class="sidebar-hdr"><span id="sidebarLabel">Medicamentos</span></div>
@@ -107,9 +665,18 @@ aside::-webkit-scrollbar-thumb{background:var(--teal2);border-radius:4px}
   </aside>
   <main id="mainContent">
     <div class="welcome">
-      <div class="welcome-icon">&#128138;</div>
-      <h2>Vademécum Académico</h2>
-      <p>Busca por nombre de sustancia, síntoma, indicación o nombre comercial.</p>
+      <div class="wlc-frame">
+        <div class="wlc-frame-outer-ring"></div>
+        <div class="wlc-frame-inner">
+<img src="data:image/png;base64,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" style="width:140px;height:140px;object-fit:contain;border-radius:18px;position:relative;z-index:2;" alt="cápsula"/>
+        </div>
+        <span class="br br-tl"></span>
+        <span class="br br-tr"></span>
+        <span class="br br-bl"></span>
+        <span class="br br-br"></span>
+      </div>
+      <div class="wlc-title">VADEMECUM<br>ACADÉMICO</div>
+      <div class="wlc-sub">Busca por nombre de sustancia, síntoma, indicación o nombre comercial.</div>
     </div>
   </main>
 </div>
@@ -227,7 +794,7 @@ function clearSearch(){
   SI.value='';CLR.classList.remove('visible');CQ='';
   FD=DRUGS.map(d=>({drug:d,mf:[],score:0}));AI=-1;
   renderList(FD);SL.textContent='Medicamentos';
-  MC.innerHTML='<div class="welcome"><div class="welcome-icon">&#128138;</div><h2>Vademécum Académico</h2><p>Busca por nombre de sustancia, síntoma, indicación o nombre comercial.</p></div>';
+  MC.innerHTML='<div class=\"welcome\"><div class=\"welcome-icon-wrap\"><span class=\"corner c-tl\"></span><span class=\"corner c-tr\"></span><span class=\"corner c-bl\"></span><span class=\"corner c-br\"></span><span class=\"welcome-pill\">&#128138;</span></div><h2>Vademécum<br><span class=\"vam-accent\">Académico</span></h2><p>Busca por nombre de sustancia, síntoma, indicación o nombre comercial.</p><div class=\"welcome-hint\">&#128269;&nbsp; Escribe para buscar</div><div class=\"welcome-stats\"><div class=\"welcome-stat\"><span class=\"num\">426</span><span class=\"lbl\">Medicamentos</span></div><div class=\"welcome-divider\"></div><div class=\"welcome-stat\"><span class=\"num\">7</span><span class=\"lbl\">Secciones</span></div><div class=\"welcome-divider\"></div><div class=\"welcome-stat\"><span class=\"num\">100%</span><span class=\"lbl\">Offline</span></div></div></div>';
   SI.focus();
 }
 
@@ -255,5 +822,725 @@ SI.addEventListener('keydown',e=>{
 FD=DRUGS.map(d=>({drug:d,mf:[],score:0}));
 renderList(FD);
 </script>
+</body>
+</htmlMC.innerHTML='<div class="welcome"><div class="wlc-frame"><div class="wlc-frame-outer-ring"></div><div class="wlc-frame-inner"><svg class="wlc-pill" viewBox="0 0 110 50" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pillL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3a4a6b"/><stop offset="100%" stop-color="#1a2540"/></linearGradient><linearGradient id="pillR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4a7fd4"/><stop offset="50%" stop-color="#2a5cb8"/><stop offset="100%" stop-color="#1a3a80"/></linearGradient></defs><rect x="0" y="0" width="57" height="50" rx="25" fill="url(#pillL)"/><rect x="53" y="0" width="57" height="50" rx="25" fill="url(#pillR)"/><line x1="55" y1="2" x2="55" y2="48" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/><circle cx="18" cy="16" r="1.5" fill="rgba(255,255,255,0.12)"/><circle cx="28" cy="24" r="1.5" fill="rgba(255,255,255,0.12)"/><circle cx="18" cy="32" r="1.5" fill="rgba(255,255,255,0.12)"/></svg></div><span class="br br-tl"></span><span class="br br-tr"></span><span class="br br-bl"></span><span class="br br-br"></span></div><div class="wlc-title">VADEMECUM<br>AC\u00c1DEMICO</div><div class="wlc-sub">Busca por nombre de sustancia, s\u00edntoma, indicaci\u00f3n o nombre comercial.</div></div>';!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jánova Médica · Vademécum Académico de Medicamentos</title>
+<style>
+/* ── iOS Dark Mode Design System ── */
+:root {
+  /* iOS Dark system colors */
+  --ios-blue:        #0A84FF;
+  --ios-teal:        #5AC8FA;
+  --ios-green:       #30D158;
+  --ios-orange:      #FF9F0A;
+  --ios-red:         #FF453A;
+  --ios-yellow:      #FFD60A;
+  --ios-purple:      #BF5AF2;
+  --ios-indigo:      #5E5CE6;
+  --ios-pink:        #FF375F;
+
+  /* Dark backgrounds (iOS dark mode layering) */
+  --bg-primary:      #000000;
+  --bg-secondary:    #1C1C1E;
+  --bg-tertiary:     #2C2C2E;
+  --bg-elevated:     #3A3A3C;
+
+  /* Labels dark */
+  --label:           #FFFFFF;
+  --label-sec:       rgba(235,235,245,0.60);
+  --label-ter:       rgba(235,235,245,0.30);
+  --label-quat:      rgba(235,235,245,0.18);
+
+  /* Fill dark */
+  --fill:            rgba(120,120,128,0.36);
+  --fill-sec:        rgba(120,120,128,0.32);
+  --fill-ter:        rgba(118,118,128,0.24);
+
+  /* Separator dark */
+  --sep:             rgba(84,84,88,0.65);
+  --sep-opaque:      #38383A;
+
+  /* Nav bar height */
+  --nav-h: 108px;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--label);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── HEADER ── */
+header {
+  background: rgba(28,28,30,0.92);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--sep-opaque);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: env(safe-area-inset-top,0) 16px 0;
+}
+
+.nav-top {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 8px;
+}
+
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--ios-blue);
+  cursor: pointer;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.menu-btn:active { background: var(--fill); }
+
+.logo {
+  font-family: -apple-system, "SF Pro Display", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ios-blue);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.logo span { color: var(--ios-teal); }
+
+.count-badge {
+  margin-left: auto;
+  background: var(--ios-blue);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  flex-shrink: 0;
+}
+
+/* Row 2: Search */
+.search-wrap { padding: 8px 0 10px; }
+
+.search-inner {
+  position: relative;
+  background: var(--fill-sec);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+.search-inner:focus-within { background: var(--fill); }
+
+.si {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--label-sec);
+  font-size: 15px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 8px 36px 8px 34px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: var(--label);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  caret-color: var(--ios-blue);
+}
+#searchInput::placeholder { color: var(--label-sec); }
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--label-ter);
+  border: none;
+  color: var(--bg-secondary);
+  cursor: pointer;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.clear-btn.visible { display: flex; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* ── SIDEBAR ── */
+aside {
+  background: var(--bg-secondary);
+  border-right: 0.5px solid var(--sep-opaque);
+  overflow-y: auto;
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+}
+aside::-webkit-scrollbar { width: 3px; }
+aside::-webkit-scrollbar-thumb { background: var(--sep-opaque); border-radius: 2px; }
+
+.sidebar-hdr {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--label-sec);
+  background: var(--bg-primary);
+  border-bottom: 0.5px solid var(--sep-opaque);
+}
+
+#drugList { list-style: none; }
+#drugList li { border-bottom: 0.5px solid var(--sep-opaque); }
+#drugList li:last-child { border-bottom: none; }
+
+#drugList li button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--label);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: background .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+#drugList li button:active { background: var(--fill-ter); }
+#drugList li:not(.active) button:hover { background: var(--fill-ter); }
+#drugList li.active button {
+  background: var(--ios-blue);
+  color: #fff;
+}
+
+.di {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(10,132,255,0.25);
+  color: var(--ios-blue);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+#drugList li.active button .di {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+.li-text { flex: 1; min-width: 0; }
+.li-name { display: block; line-height: 1.3; font-weight: 500; }
+.li-match {
+  display: block;
+  font-size: 12px;
+  color: var(--label-sec);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#drugList li.active button .li-match { color: rgba(255,255,255,0.70); }
+
+.match-tag {
+  display: inline-block;
+  background: rgba(10,132,255,0.18);
+  color: var(--ios-blue);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 3px;
+}
+#drugList li.active button .match-tag {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.no-results {
+  padding: 24px 16px;
+  color: var(--label-sec);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ── MAIN ── */
+main { padding: 20px 16px; overflow-y: auto; }
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 12px;
+}
+.welcome-icon { font-size: 56px; opacity: 0.12; }
+.welcome h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--label);
+  opacity: 0.28;
+  letter-spacing: -0.5px;
+}
+.welcome p {
+  color: var(--label-sec);
+  max-width: 320px;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.drug-card {
+  max-width: 860px;
+  animation: slideUp .28s cubic-bezier(0.34,1.04,0.64,1);
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* Drug header – dark gradient-free */
+.drug-header {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--sep-opaque);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  padding: 22px 20px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.drug-header::before {
+  content:"";
+  position:absolute; top:-40px; right:-40px;
+  width:160px; height:160px;
+  background: rgba(10,132,255,0.08);
+  border-radius:50%;
+}
+.drug-header::after {
+  content:"";
+  position:absolute; bottom:-50px; left:20px;
+  width:120px; height:120px;
+  background: rgba(90,200,250,0.06);
+  border-radius:50%;
+}
+
+.drug-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--label);
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.3px;
+}
+.drug-cat {
+  margin-top: 6px;
+  display: inline-block;
+  background: rgba(10,132,255,0.18);
+  color: var(--ios-blue);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.search-context { margin-top: 8px; position: relative; z-index: 1; }
+.context-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(90,200,250,0.15);
+  color: var(--ios-teal);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin: 2px 3px 2px 0;
+}
+
+/* Sections – dark table view */
+.sections-grid {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--sep-opaque);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+}
+
+.section-block { border-bottom: 0.5px solid var(--sep-opaque); overflow: hidden; }
+.section-block:last-child { border-bottom: none; }
+.section-block.has-match .section-toggle { background: rgba(48,209,88,0.07); }
+
+.section-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.section-toggle:active { background: var(--fill-ter); }
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.section-title { font-size: 16px; font-weight: 600; color: var(--label); flex: 1; }
+.match-indicator {
+  font-size: 11px;
+  background: rgba(48,209,88,0.18);
+  color: var(--ios-green);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.section-chevron {
+  color: var(--label-ter);
+  font-size: 13px;
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.section-toggle.open .section-chevron { transform: rotate(180deg); }
+.section-body { max-height: 0; overflow: hidden; transition: max-height .38s cubic-bezier(.4,0,.2,1); }
+.section-body.open { max-height: 3000px; }
+
+.section-content {
+  padding: 4px 16px 16px 60px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--label-sec);
+}
+
+/* Section icon colors – dark versions */
+.sec-propiedades   .section-icon { background: rgba(10,132,255,0.15);  color: var(--ios-blue); }
+.sec-indicaciones  .section-icon { background: rgba(48,209,88,0.15);   color: var(--ios-green); }
+.sec-contra        .section-icon { background: rgba(255,159,10,0.15);  color: var(--ios-orange); }
+.sec-reacciones    .section-icon { background: rgba(255,69,58,0.15);   color: var(--ios-red); }
+.sec-advertencias  .section-icon { background: rgba(255,214,10,0.15);  color: var(--ios-yellow); }
+.sec-viadosis      .section-icon { background: rgba(90,200,250,0.15);  color: var(--ios-teal); }
+.sec-presentaciones .section-icon{ background: rgba(191,90,242,0.15);  color: var(--ios-purple); }
+
+mark {
+  background: rgba(255,214,10,0.25);
+  color: var(--label);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.dosis-block {
+  background: rgba(90,200,250,0.08);
+  border-left: 3px solid var(--ios-teal);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  margin: 6px 0;
+  font-family: "SF Mono","Courier New",monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--label-sec);
+}
+.pres-item {
+  background: rgba(191,90,242,0.08);
+  border-left: 3px solid var(--ios-purple);
+  padding: 6px 10px;
+  border-radius: 0 8px 8px 0;
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--label-sec);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  :root { --nav-h: 108px; }
+  .layout { grid-template-columns: 1fr; }
+  aside {
+    position: fixed;
+    left: -285px;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    width: 285px;
+    transition: left .28s cubic-bezier(.4,0,.2,1);
+    z-index: 50;
+  }
+  aside.open { left: 0; box-shadow: 6px 0 40px rgba(0,0,0,0.6); }
+  .menu-btn { display: flex; }
+  .drug-name { font-size: 20px; }
+  .drug-header { padding: 18px 16px 16px; border-radius: 14px 14px 0 0; }
+  .sections-grid { border-radius: 0 0 14px 14px; }
+  .section-content { padding-left: 56px; }
+  main { padding: 16px 12px; }
+}
+
+@media (min-width: 769px) {
+  :root { --nav-h: 64px; }
+  header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    height: 64px;
+  }
+  .nav-top { flex: none; padding: 0; height: auto; }
+  .search-wrap { flex: 1; max-width: 540px; padding: 0; margin-left: 12px; }
+  .count-badge { order: 10; }
+}
+
+
+
+/* ── Welcome screen – exact replica ── */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-h) - 60px);
+  text-align: center;
+  padding: 24px 20px 32px;
+  position: relative;
+  overflow: hidden;
+  background: #1b2538;
+}
+
+/* PCB circuit texture */
+.welcome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(80,140,255,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,140,255,0.055) 1px, transparent 1px);
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+
+/* radial fade so grid is visible only in center-edges */
+.welcome::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 65% at 50% 50%,
+    transparent 30%, #1b2538 100%);
+  pointer-events: none;
+}
+
+/* ── Pill icon frame ── */
+.wlc-frame {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* dark metallic rounded square */
+.wlc-frame-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #1e2d45 0%, #111824 100%);
+  border: 1.5px solid rgba(80,140,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* circuit lines inside frame */
+.wlc-frame-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(80,140,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,140,255,0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* 3D pill SVG */
+.wlc-pill {
+  width: 110px;
+  height: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+/* corner bracket decorations on the frame */
+.wlc-frame .br {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(80,150,255,0.7);
+  border-style: solid;
+}
+.wlc-frame .br-tl { top: -1px; left: -1px; border-width: 3px 0 0 3px; border-radius: 8px 0 0 0; }
+.wlc-frame .br-tr { top: -1px; right: -1px; border-width: 3px 3px 0 0; border-radius: 0 8px 0 0; }
+.wlc-frame .br-bl { bottom: -1px; left: -1px; border-width: 0 0 3px 3px; border-radius: 0 0 0 8px; }
+.wlc-frame .br-br { bottom: -1px; right: -1px; border-width: 0 3px 3px 0; border-radius: 0 0 8px 0; }
+
+/* outer subtle ring */
+.wlc-frame-outer-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 38px;
+  border: 1px solid rgba(80,140,255,0.1);
+}
+
+/* ── Title & subtitle ── */
+.wlc-title {
+  font-size: 30px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.wlc-sub {
+  font-size: 14px;
+  color: rgba(180,195,220,0.7);
+  line-height: 1.6;
+  max-width: 270px;
+  position: relative;
+  z-index: 1;
+}
+
+
+</style>
+</head>
+<body>
+<header>
+  <div class="nav-top">
+    <button class="menu-btn" onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button>
+    <div class="logo"><span style="color:#E9C46A;">Jánova</span> <span style="color:#0A84FF;">Médica</span></div>
+    <div class="count-badge" id="countBadge">426 medicamentos</div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-inner">
+      <span class="si">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="Buscar sustancia, síntoma, indicación..." autocomplete="off"/>
+      <button class="clear-btn" id="clearBtn" onclick="clearSearch()">&#10005;</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar">
+    <div class="sidebar-hdr"><span id="sidebarLabel">Medicamentos</span></div>
+    <ul id="drugList"></ul>
+  </aside>
+  <main id="mainContent">
+    <div class="welcome">
+      <div class="wlc-frame">
+        <div class="wlc-frame-outer-ring"></div>
+        <div class="wlc-frame-inner">
+          <!-- 3D pill SVG -->
+          <svg class="wlc-pill" viewBox="0 0 110 50" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pillL" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3a4a6b"/>
+                <stop offset="100%" stop-color="#1a2540"/>
+              </linearGradient>
+              <linearGradient id="pillR" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4a7fd4"/>
+                <stop offset="50%" stop-color="#2a5cb8"/>
+                <stop offset="100%" stop-color="#1a3a80"/>
+              </linearGradient>
+              <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.25)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+              </linearGradient>
+              <clipPath id="pillClip">
+                <rect x="0" y="0" width="110" height="50" rx="25"/>
+              </clipPath>
+            </defs>
+            <!-- left half grey -->
+            <rect x="0" y="0" width="57" height="50" rx="25" fill="url(#pillL)" clip-path="url(#pillClip)"/>
+            <!-- right half blue -->
+            <rect x="53" y="0" width="57" height="50" rx="25" fill="url(#pillR)" clip-path="url(#pillClip)"/>
+            <!-- dividing seam -->
+            <line x1="55" y1="2" x2="55" y2="48" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+            <!-- dot texture on grey half -->
+            <circle cx="18" cy="16" r="1.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="28" cy="24" r="1.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="18" cy="32" r="1.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="38" cy="14" r="1.5" fill="rgba(255,255,255,0.10)"/>
+            <circle cx="42" cy="30" r="1.5" fill="rgba(255,255,255,0.10)"/>
+            <circle cx="12" cy="24" r="1.5" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="32" cy="36" r="1.5" fill="rgba(255,255,255,0.08)"/>
+            <!-- shine overlay -->
+            <rect x="0" y="0" width="110" height="22" rx="25" fill="url(#shine)" clip-path="url(#pillClip)"/>
+          </svg>
+        </div>
+        <span class="br br-tl"></span>
+        <span class="br br-tr"></span>
+        <span class="br br-bl"></span>
+        <span class="br br-br"></span>
+      </div>
+      <div class="wlc-title">VADEMECUM<br>ACADÉMICO</div>
+      <div class="wlc-sub">Busca por nombre de sustancia, síntoma, indicación o nombre comercial.</div>
+    </div>
+  </main>
+</div>
+
 </body>
 </html>
