@@ -187,7 +187,8 @@ header {
 .layout {
   display: grid;
   grid-template-columns: 280px 1fr;
-  min-height: calc(100vh - var(--nav-h));
+  height: calc(100vh - var(--nav-h));
+  overflow: hidden;
 }
 
 /* ── SIDEBAR ── */
@@ -295,7 +296,7 @@ aside::-webkit-scrollbar-thumb { background: var(--sep-opaque); border-radius: 2
 }
 
 /* ── MAIN ── */
-main { padding: 20px 16px; overflow-y: auto; }
+main { padding: 20px 16px; overflow-y: auto; height: 100%; -webkit-overflow-scrolling: touch; }
 
 .welcome {
   display: flex;
@@ -397,7 +398,7 @@ main { padding: 20px 16px; overflow-y: auto; }
   border: 0.5px solid var(--sep-opaque);
   border-top: none;
   border-radius: 0 0 16px 16px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .section-block { border-bottom: 0.5px solid var(--sep-opaque); overflow: hidden; }
@@ -527,7 +528,7 @@ mark {
   .menu-btn { display: flex; }
 
   /* Main */
-  main { padding: 12px 10px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  main { padding: 12px 10px; padding-bottom: max(12px, env(safe-area-inset-bottom)); height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .drug-card { margin: 0; }
   .drug-name { font-size: clamp(17px, 4.5vw, 22px); }
   .drug-header { padding: 14px 14px 12px; border-radius: 12px 12px 0 0; }
